@@ -1,5 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
+import { HttpClient } from '@angular/common/http';
 import { Component, VERSION } from '@angular/core';
+import { catchError } from 'rxjs';
 const animationDuration = 500;
 const slideLeft = transition('* => *', [
   style({ transform: 'translateX(0)' }),
@@ -35,4 +37,12 @@ const slideInRight = transition('* => *', [
 })
 export class AppComponent {
   name = 'Angular ' + VERSION.major;
+  constructor(private http: HttpClient) {
+    this.http
+      .post('https://conduit.productionready.io/api/users', {})
+      .pipe(catchError(this.handleError));
+  }
+  handleError(e: any): any {
+    console.log(e);
+  }
 }
